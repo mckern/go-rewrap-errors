@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
@@ -35,14 +35,14 @@ func main() {
 	case 0:
 		fromStdin = true
 		filename = "stdin"
-		oldSource, err = ioutil.ReadAll(os.Stdin)
+		oldSource, err = io.ReadAll(os.Stdin)
 		if err != nil {
 			log.Fatalf("couldn't read from stdin: %v", err)
 			os.Exit(1)
 		}
 	case 1:
 		filename = pflag.Args()[0]
-		oldSource, err = ioutil.ReadFile(filename)
+		oldSource, err = os.ReadFile(filename)
 		if err != nil {
 			log.Fatalf("couldn't read from %s: %v", filename, err)
 			os.Exit(1)
@@ -64,7 +64,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		ioutil.WriteFile(filename, newSource, fi.Mode())
+		os.WriteFile(filename, newSource, fi.Mode())
 	} else {
 		fmt.Print(string(newSource))
 	}
